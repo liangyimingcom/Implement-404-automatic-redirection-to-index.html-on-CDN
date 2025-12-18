@@ -46,6 +46,8 @@
 
 - 基本了解CloudFront和Lambda服务
 
+- **推荐使用 Node.js 24.x**：本教程使用 Node.js 24.x（最新LTS版本），AWS Lambda@Edge 将支持至 2028年4月
+
 ### **步骤一：创建Lambda函数**
 
 1.  登录AWS管理控制台，确保区域设置为**US East (N. Virginia) / 美国东部(弗吉尼亚北部)**地区（us-east-1）
@@ -60,7 +62,7 @@
 
     - **函数名称**：CloudFront404Redirect（或您喜欢的任何名称）
 
-    - **运行时**：选择 Node.js 18.x（或当前可用的Node.js最新版本）
+    - **运行时**：选择 Node.js 24.x（最新LTS版本，AWS Lambda@Edge支持至2028年4月）
 
     - **架构**：x86_64
 
@@ -70,27 +72,31 @@
 
 6.  在代码编辑器中，将以下代码复制粘贴到index.js中：
 
-``` python
-exports.handler = async (event, context) =\> {  
- const response = event.Records\[0\].cf.response;  
 
- if (response.status === '404') {  
-     response.status = '302';  
-     response.statusDescription = 'Found';  
-       
-     if (response.headers\['location'\]) {  
-         delete response.headers.location;  
-    }  
-       
-     response.headers.location = \[{  
-         key: 'Location',  
-         value: '/index.php'  
-    }\];  
-}  
+``` javascript
+exports.handler = async (event) => {
+    const response = event.Records[0].cf.response;
 
- return response;  
+    if (response.status === '404') {
+        response.status = '302';
+        response.statusDescription = 'Found';
+        
+        if (response.headers['location']) {
+            delete response.headers.location;
+        }
+        
+        response.headers.location = [{
+            key: 'Location',
+            value: '/index.php'
+        }];
+    }
+
+    return response;
 };
 ```
+
+> **注意**：此代码使用 async/await 模式，这是 Node.js 24.x 的要求。Node.js 24 不再支持基于回调的处理程序。
+
 7.  点击 **部署** 按钮保存更改
 
 ![image-20250508110320483](./assets/image-20250508110320483.png)
@@ -259,6 +265,13 @@ exports.handler = async (event, context) =\> {
 2.  **部署延迟**：Lambda@Edge与CloudFront的关联可能需要几分钟到十几分钟才能完全生效
 
 3.  **缓存行为**：确保理解CloudFront的缓存行为，以避免意外结果
+
+4.  **Node.js 24.x 运行时要求**：
+    - Node.js 24.x 是最新的LTS（长期支持）版本
+    - AWS Lambda@Edge 对 Node.js 24.x 的支持将持续至 2028年4月
+    - 必须使用 async/await 模式，不再支持基于回调（callback）的处理程序
+    - 函数签名应为 `async (event)` 而不是 `(event, context, callback)`
+    - 使用 `return` 返回响应，而不是 `callback(null, response)`
 
 **结论**
 
