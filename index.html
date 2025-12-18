@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>CloudFront 404 自动重定向演示</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Microsoft YaHei", "PingFang SC", "Hiragino Sans GB", "WenQuanYi Micro Hei", sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            padding: 40px;
+            max-width: 800px;
+            width: 100%;
+        }
+
+        h1 {
+            color: #667eea;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        h2 {
+            color: #764ba2;
+            font-size: 1.8em;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        p {
+            margin-bottom: 15px;
+            font-size: 1.1em;
+            text-align: justify;
+        }
+
+        .feature-box {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .feature-box h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        ul {
+            margin-left: 30px;
+            margin-bottom: 15px;
+        }
+
+        li {
+            margin-bottom: 10px;
+            font-size: 1.05em;
+        }
+
+        .success-badge {
+            background: #28a745;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            display: inline-block;
+            margin-top: 10px;
+        }
+
+        .test-links {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            padding: 20px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+
+        .test-links a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: bold;
+            display: block;
+            margin: 5px 0;
+            padding: 5px 0;
+        }
+
+        .test-links a:hover {
+            color: #764ba2;
+            text-decoration: underline;
+        }
+
+        .code-block {
+            background: #282c34;
+            color: #abb2bf;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            overflow-x: auto;
+            font-family: "Consolas", "Monaco", "Courier New", monospace;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            color: #666;
+        }
+
+        .emoji {
+            font-size: 1.2em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎉 CloudFront 404 自动重定向功能演示</h1>
+        
+        <div class="feature-box">
+            <h3>✅ 重定向功能已成功部署</h3>
+            <p>您现在正在查看的页面就是 404 错误自动重定向的目标页面。任何访问不存在资源的请求都会被自动重定向到这里。</p>
+            <span class="success-badge">功能正常运行中</span>
+        </div>
+
+        <h2>功能说明</h2>
+        <p>本系统使用 AWS Lambda@Edge 技术实现了智能的 404 错误处理机制。当用户访问 CloudFront 分配中不存在的资源时，系统会自动将用户重定向到主页（/index.php 或 /index.html），而不是显示错误页面。</p>
+
+        <h2>技术特点</h2>
+        <ul>
+            <li><span class="emoji">🚀</span> <strong>无缝重定向</strong>：用户体验流畅，无需看到错误信息</li>
+            <li><span class="emoji">🌐</span> <strong>全球边缘部署</strong>：Lambda@Edge 在全球 CloudFront 边缘位置执行，响应迅速</li>
+            <li><span class="emoji">🔧</span> <strong>灵活配置</strong>：可以轻松修改重定向目标和规则</li>
+            <li><span class="emoji">📊</span> <strong>完整日志</strong>：所有重定向操作都记录在 CloudWatch 日志中</li>
+            <li><span class="emoji">🔒</span> <strong>安全可靠</strong>：基于 AWS 原生服务，安全性有保障</li>
+        </ul>
+
+        <h2>测试重定向功能</h2>
+        <p>您可以点击以下链接测试 404 重定向功能。这些链接指向不存在的页面，但都会自动重定向回本页面：</p>
+        
+        <div class="test-links">
+            <strong>🧪 测试链接（点击后会自动重定向回来）：</strong>
+            <a href="/test123">测试页面 1: /test123</a>
+            <a href="/missing.html">测试页面 2: /missing.html</a>
+            <a href="/folder/not-here.jpg">测试页面 3: /folder/not-here.jpg</a>
+            <a href="/任意中文路径">测试页面 4: /任意中文路径</a>
+        </div>
+
+        <h2>工作原理</h2>
+        <div class="feature-box">
+            <ol>
+                <li>用户请求一个不存在的资源</li>
+                <li>源服务器返回 404 状态码</li>
+                <li>Lambda@Edge 函数拦截这个响应</li>
+                <li>函数将 404 转换为 302 重定向</li>
+                <li>浏览器自动跳转到 /index.php</li>
+                <li>用户看到主页内容而不是错误信息</li>
+            </ol>
+        </div>
+
+        <h2>Lambda@Edge 函数代码示例</h2>
+        <div class="code-block">
+exports.handler = async (event) => {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;const response = event.Records[0].cf.response;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;if (response.status === '404') {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;response.status = '302';<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;response.statusDescription = 'Found';<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;response.headers.location = [{ key: 'Location', value: '/index.php' }];<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;&nbsp;&nbsp;return response;<br>
+};
+        </div>
+
+        <h2>中文支持</h2>
+        <p>本系统完全支持中文字符的显示和处理，包括：</p>
+        <ul>
+            <li>✅ 页面内容完全使用中文显示</li>
+            <li>✅ URL 中可以包含中文路径</li>
+            <li>✅ 代码注释和文档全部使用中文</li>
+            <li>✅ 错误信息和提示信息支持中文</li>
+            <li>✅ 使用 UTF-8 编码确保中文正确显示</li>
+        </ul>
+
+        <h2>适用场景</h2>
+        <div class="feature-box">
+            <p><strong>本解决方案特别适合以下场景：</strong></p>
+            <ul>
+                <li>单页应用（SPA）的前端路由</li>
+                <li>需要友好错误处理的静态网站</li>
+                <li>希望隐藏 404 错误的企业门户</li>
+                <li>使用 CloudFront 分发的 Web 应用</li>
+                <li>需要自定义错误处理逻辑的网站</li>
+            </ul>
+        </div>
+
+        <footer>
+            <p><strong>作者：</strong>liangyimingcom</p>
+            <p><strong>技术栈：</strong>AWS CloudFront + Lambda@Edge + Node.js 24.x</p>
+            <p><strong>编码：</strong>UTF-8 (完全支持中文)</p>
+            <p>© 2025 | 更多信息请参阅 <a href="https://github.com/liangyimingcom/Implement-404-automatic-redirection-to-index.html-on-CDN" target="_blank" style="color: #667eea;">GitHub 仓库</a></p>
+        </footer>
+    </div>
+
+    <script>
+        // 页面加载完成后的初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('✅ CloudFront 404 自动重定向演示页面已加载');
+            console.log('📍 当前页面支持完整的中文显示');
+            console.log('🌐 Lambda@Edge 函数正在后台运行');
+            
+            // 显示当前 URL 信息（中文提示）
+            console.log('当前 URL:', window.location.href);
+            
+            // 如果 URL 中有参数，显示重定向信息
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.has('redirected')) {
+                console.log('ℹ️ 您是通过 404 重定向到达此页面的');
+            }
+        });
+
+        // 添加测试链接的点击事件（用于演示）
+        document.querySelectorAll('.test-links a').forEach(function(link) {
+            link.addEventListener('click', function(e) {
+                console.log('🔗 正在测试重定向功能，目标:', this.getAttribute('href'));
+            });
+        });
+    </script>
+</body>
+</html>
