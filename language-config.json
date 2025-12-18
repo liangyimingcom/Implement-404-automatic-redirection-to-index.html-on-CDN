@@ -1,0 +1,212 @@
+{
+  "project": {
+    "name": "CloudFront 404 自动重定向",
+    "name_en": "CloudFront 404 Auto Redirect",
+    "description": "AWS CloudFront CDN 上实现 404 错误自动重定向到 index.html 的解决方案",
+    "description_en": "Solution for automatic 404 error redirection to index.html on AWS CloudFront CDN",
+    "author": "liangyimingcom",
+    "version": "2.0.0",
+    "updated": "2025-12-18"
+  },
+  "language": {
+    "default": "zh-CN",
+    "supported": ["zh-CN", "en-US"],
+    "encoding": "UTF-8"
+  },
+  "messages": {
+    "zh-CN": {
+      "redirect_success": "重定向成功！",
+      "redirect_message": "您访问的页面不存在，已自动重定向到主页。",
+      "page_not_found": "页面未找到",
+      "error_404_title": "404 - 页面未找到",
+      "error_404_message": "抱歉，您访问的页面不存在或已被移除。",
+      "redirect_in_seconds": "秒后自动跳转...",
+      "return_home": "返回首页",
+      "test_links_title": "测试重定向功能",
+      "test_links_message": "点击以下链接测试 404 重定向功能：",
+      "working_principle": "工作原理",
+      "technical_features": "技术特点",
+      "use_cases": "适用场景",
+      "troubleshooting": "问题排查",
+      "lambda_function_info": "Lambda@Edge 函数说明",
+      "chinese_support": "中文支持",
+      "deployment_guide": "部署指南",
+      "request_info": "请求信息",
+      "current_url": "当前 URL",
+      "client_ip": "客户端 IP",
+      "request_time": "请求时间",
+      "user_agent": "用户代理",
+      "server_info": "服务器信息",
+      "php_version": "PHP 版本",
+      "success_badge": "功能正常运行中",
+      "loading": "加载中...",
+      "redirecting": "正在跳转...",
+      "testing": "测试中...",
+      "status_deployed": "已部署",
+      "status_deploying": "部署中",
+      "status_failed": "部署失败"
+    },
+    "en-US": {
+      "redirect_success": "Redirect Successful!",
+      "redirect_message": "The page you requested does not exist. You have been automatically redirected to the homepage.",
+      "page_not_found": "Page Not Found",
+      "error_404_title": "404 - Page Not Found",
+      "error_404_message": "Sorry, the page you are looking for does not exist or has been removed.",
+      "redirect_in_seconds": "Redirecting in seconds...",
+      "return_home": "Return Home",
+      "test_links_title": "Test Redirect Function",
+      "test_links_message": "Click the following links to test the 404 redirect function:",
+      "working_principle": "How It Works",
+      "technical_features": "Technical Features",
+      "use_cases": "Use Cases",
+      "troubleshooting": "Troubleshooting",
+      "lambda_function_info": "Lambda@Edge Function Info",
+      "chinese_support": "Chinese Support",
+      "deployment_guide": "Deployment Guide",
+      "request_info": "Request Information",
+      "current_url": "Current URL",
+      "client_ip": "Client IP",
+      "request_time": "Request Time",
+      "user_agent": "User Agent",
+      "server_info": "Server Information",
+      "php_version": "PHP Version",
+      "success_badge": "Running Normally",
+      "loading": "Loading...",
+      "redirecting": "Redirecting...",
+      "testing": "Testing...",
+      "status_deployed": "Deployed",
+      "status_deploying": "Deploying",
+      "status_failed": "Failed"
+    }
+  },
+  "redirect_config": {
+    "default_target": "/index.php",
+    "alternative_target": "/index.html",
+    "redirect_type": "302",
+    "redirect_types": {
+      "301": "永久重定向 (Permanent Redirect)",
+      "302": "临时重定向 (Temporary Redirect)",
+      "307": "临时重定向保持方法 (Temporary Redirect - Keep Method)",
+      "308": "永久重定向保持方法 (Permanent Redirect - Keep Method)"
+    }
+  },
+  "lambda_config": {
+    "runtime": "nodejs24.x",
+    "region": "us-east-1",
+    "region_name": "美国东部(弗吉尼亚北部)",
+    "timeout": 5,
+    "memory": 128,
+    "trigger_event": "origin-response",
+    "trigger_event_name": "源响应 (Origin Response)"
+  },
+  "cloudfront_config": {
+    "cache_behavior": "*",
+    "cache_behavior_name": "默认缓存行为",
+    "deployment_time": "5-30分钟",
+    "global_propagation": "最多24小时"
+  },
+  "test_urls": {
+    "zh-CN": [
+      "/test123",
+      "/missing.html",
+      "/folder/not-here.jpg",
+      "/测试页面",
+      "/中文路径/文件",
+      "/不存在的资源"
+    ],
+    "en-US": [
+      "/test123",
+      "/missing.html",
+      "/folder/not-here.jpg",
+      "/nonexistent-page",
+      "/missing/resource",
+      "/not-found"
+    ]
+  },
+  "error_messages": {
+    "zh-CN": {
+      "deployment_not_complete": "CloudFront 部署尚未完成，请稍后再试",
+      "lambda_not_associated": "Lambda@Edge 函数未正确关联到 CloudFront",
+      "iam_permission_error": "IAM 角色权限配置错误",
+      "function_not_published": "Lambda 函数未发布版本，请发布后再试",
+      "invalid_region": "Lambda@Edge 函数必须在 us-east-1 区域创建",
+      "encoding_error": "字符编码错误，请确保使用 UTF-8 编码",
+      "php_not_supported": "源服务器不支持 PHP",
+      "file_permission_error": "文件权限错误，请检查文件权限设置"
+    },
+    "en-US": {
+      "deployment_not_complete": "CloudFront deployment is not complete, please try again later",
+      "lambda_not_associated": "Lambda@Edge function is not properly associated with CloudFront",
+      "iam_permission_error": "IAM role permission configuration error",
+      "function_not_published": "Lambda function version not published, please publish and try again",
+      "invalid_region": "Lambda@Edge function must be created in us-east-1 region",
+      "encoding_error": "Character encoding error, please ensure UTF-8 encoding is used",
+      "php_not_supported": "Origin server does not support PHP",
+      "file_permission_error": "File permission error, please check file permissions"
+    }
+  },
+  "documentation": {
+    "files": {
+      "README.md": {
+        "language": "zh-CN",
+        "description": "项目主文档，包含完整的部署指南和操作说明",
+        "encoding": "UTF-8"
+      },
+      "README_CN.md": {
+        "language": "zh-CN",
+        "description": "详细的中文技术文档，包含高级配置和问题排查",
+        "encoding": "UTF-8"
+      },
+      "index.js": {
+        "language": "zh-CN",
+        "description": "Lambda@Edge 函数代码，包含详细中文注释",
+        "encoding": "UTF-8"
+      },
+      "index.html": {
+        "language": "zh-CN",
+        "description": "HTML 版本的重定向目标页面",
+        "encoding": "UTF-8"
+      },
+      "index.php": {
+        "language": "zh-CN",
+        "description": "PHP 版本的重定向目标页面",
+        "encoding": "UTF-8"
+      },
+      "404.html": {
+        "language": "zh-CN",
+        "description": "备用 404 错误页面",
+        "encoding": "UTF-8"
+      }
+    }
+  },
+  "support": {
+    "chinese_features": [
+      "完整的中文界面支持",
+      "UTF-8 编码确保中文正确显示",
+      "中文代码注释和文档",
+      "中文错误消息和提示",
+      "支持中文 URL 路径",
+      "中文字符显示测试",
+      "简体和繁体中文支持"
+    ],
+    "technical_support": {
+      "github": "https://github.com/liangyimingcom/Implement-404-automatic-redirection-to-index.html-on-CDN",
+      "author": "liangyimingcom",
+      "email": "请通过 GitHub Issues 联系"
+    }
+  },
+  "compatibility": {
+    "browsers": [
+      "Chrome 90+",
+      "Firefox 88+",
+      "Safari 14+",
+      "Edge 90+",
+      "移动浏览器（支持现代标准）"
+    ],
+    "servers": {
+      "PHP": "7.4+",
+      "Node.js": "18.x, 20.x, 24.x",
+      "Web服务器": "Apache, Nginx, 任何支持 PHP/静态文件的服务器"
+    }
+  }
+}

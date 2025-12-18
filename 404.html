@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>404 - 页面未找到</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Microsoft YaHei", "PingFang SC", "Hiragino Sans GB", "WenQuanYi Micro Hei", sans-serif;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.3);
+            padding: 50px;
+            max-width: 700px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .error-code {
+            font-size: 8em;
+            font-weight: bold;
+            color: #f5576c;
+            line-height: 1;
+            margin-bottom: 20px;
+            text-shadow: 3px 3px 0px rgba(245, 87, 108, 0.2);
+        }
+
+        h1 {
+            color: #f5576c;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+
+        p {
+            font-size: 1.2em;
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+        .message-box {
+            background: #fff3f3;
+            border: 2px solid #f5576c;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 30px 0;
+            text-align: left;
+        }
+
+        .message-box h2 {
+            color: #f5576c;
+            font-size: 1.5em;
+            margin-bottom: 15px;
+        }
+
+        .message-box ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .message-box li {
+            padding: 8px 0;
+            padding-left: 25px;
+            position: relative;
+        }
+
+        .message-box li:before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: #f5576c;
+            font-weight: bold;
+        }
+
+        .btn-home {
+            display: inline-block;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 15px 40px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 1.1em;
+            font-weight: bold;
+            margin-top: 20px;
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 5px 15px rgba(245, 87, 108, 0.3);
+        }
+
+        .btn-home:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(245, 87, 108, 0.4);
+        }
+
+        .countdown {
+            font-size: 1.1em;
+            color: #f5576c;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+
+        .emoji {
+            font-size: 1.5em;
+        }
+
+        .info-note {
+            background: #e7f3ff;
+            border-left: 4px solid #2196F3;
+            padding: 15px;
+            margin: 20px 0;
+            text-align: left;
+            border-radius: 5px;
+        }
+
+        .info-note strong {
+            color: #2196F3;
+        }
+
+        footer {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            color: #999;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="error-code">404</div>
+        <h1><span class="emoji">😕</span> 哎呀！页面未找到</h1>
+        <p>您访问的页面不存在或已被移除。</p>
+
+        <div class="message-box">
+            <h2>可能的原因：</h2>
+            <ul>
+                <li>您输入的网址有误</li>
+                <li>该页面已被删除或移动到其他位置</li>
+                <li>您点击的链接已过期</li>
+                <li>该资源从未存在过</li>
+            </ul>
+        </div>
+
+        <div class="info-note">
+            <strong><span class="emoji">ℹ️</span> 提示：</strong> 
+            如果您启用了 Lambda@Edge 404 自动重定向功能，此页面应该不会被看到。
+            正常情况下，所有 404 错误都会自动重定向到主页。
+            如果您看到了这个页面，可能是：
+            <ul style="margin-top: 10px;">
+                <li>Lambda@Edge 功能尚未启用</li>
+                <li>CloudFront 分配正在部署中</li>
+                <li>这是一个备用的 404 错误页面</li>
+            </ul>
+        </div>
+
+        <div class="countdown" id="countdown">
+            <span class="emoji">⏰</span> <span id="seconds">5</span> 秒后自动返回首页...
+        </div>
+
+        <a href="/" class="btn-home">
+            <span class="emoji">🏠</span> 立即返回首页
+        </a>
+
+        <footer>
+            <p><strong>技术支持：</strong>liangyimingcom</p>
+            <p>CloudFront 404 自动重定向解决方案</p>
+            <p>© 2025 | UTF-8 编码 | 完全支持中文</p>
+        </footer>
+    </div>
+
+    <script>
+        // 倒计时自动跳转
+        let seconds = 5;
+        const countdownElement = document.getElementById('countdown');
+        const secondsElement = document.getElementById('seconds');
+
+        const countdown = setInterval(function() {
+            seconds--;
+            secondsElement.textContent = seconds;
+            
+            if (seconds <= 0) {
+                clearInterval(countdown);
+                countdownElement.innerHTML = '<span class="emoji">🔄</span> 正在跳转到首页...';
+                window.location.href = '/';
+            }
+        }, 1000);
+
+        // 记录 404 错误信息到控制台
+        console.log('%c404 错误 - 页面未找到', 'color: #f5576c; font-size: 20px; font-weight: bold;');
+        console.log('当前 URL:', window.location.href);
+        console.log('来源页面:', document.referrer || '直接访问');
+        console.log('用户代理:', navigator.userAgent);
+        console.log('时间戳:', new Date().toISOString());
+        
+        console.log('%c提示: 如果启用了 Lambda@Edge 404 自动重定向，您不应该看到此页面', 'color: #2196F3; font-size: 14px;');
+    </script>
+</body>
+</html>
